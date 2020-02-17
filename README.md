@@ -2,7 +2,7 @@
 
 ### clone
 ```
-$ git clone <Git URL> torimo-web
+$ git clone https://github.com/PuriPuriApplication/torimo-web.git torimo-web
 ```
 
 ### 開発環境での Node / npm のバージョンについて
@@ -10,13 +10,13 @@ $ git clone <Git URL> torimo-web
 * Node ... v13.0.1
 * npm ... v6.12.0
 
-開発を行う前に、上記のバージョンとなっているかを確認してください。
-バージョンが異なる場合、開発時にエラーとなります。（npm でインストールできないなど）
+開発を行う前に、上記のバージョンとなっているかを確認してください。  
+バージョンが異なる場合、開発時にエラーとなります。（npm でインストールできないなど）  
 
 #### Node / npm のバージョン管理ツールについて
 
-Node ... nodebrew / nvm / n
-npm ... 以下のコマンドで更新
+Node ... nodebrew / nvm / n  
+npm ... 以下のコマンドで更新  
 
 ```
 $ npm i -g npm@6.12.0
@@ -29,7 +29,7 @@ $ npm ci
 
 ### 起動
 
-以下のコマンドを実行すると、コンテナが立ち上がります。
+以下のコマンドを実行すると、コンテナが立ち上がります。  
 
 ```
 $ bash run.sh
@@ -37,7 +37,7 @@ $ bash run.sh
 
 ### 環境変数について
 
-各環境ごとに `.env` ファイルを作成します。ファイル作成場所はプロジェクトのルートディレクトリです。
+各環境ごとに `.env` ファイルを作成します。ファイル作成場所はプロジェクトのルートディレクトリです。  
 
 |ファイル名 |モード名  |ローカルで完結するか　|
 |---        |---       |---              |
@@ -50,8 +50,20 @@ $ bash run.sh
 |.env.test  |ユニットテスト環境で読み込まれる  |×  |
 |.env.test.local  |ユニットテスト環境で読み込まれる  |○  |
 
-各環境ごとのファイルを作成する際は、 `env.sample` を参照し作成すること。
-⚠️ **本番環境へデプロイ (firebase hosting) する際には、 `.env` または `.env.production` ファイルを用意すること** ⚠️
+各環境ごとのファイルを作成する際は、 `env.sample` を参照し作成すること。  
+⚠️ **本番環境へデプロイ (firebase hosting) する際には、 `.env` または `.env.production` ファイルを用意すること** ⚠️  
+
+### deploy
+ローカル環境で firebase hosting へデプロイする際には firebase へ login する必要があります。  
+`npm run deploy` 一発でデプロイできないことに注意してください。  
+また、CI 環境でデプロイのジョブを組んでいるため、ローカル環境でデプロイすることはあまりないかと思われます。  
+
+```
+$ npm i -g firebase-tools (<- インストールしてなければ)
+$ firebase login
+$ firebase use torimo-web
+$ npm run deploy
+```
 
 ### トイル周りについて
 
@@ -62,7 +74,7 @@ $ bash run.sh
 
 ### CI / CD
 
-CircleCI を使用しています。master branch にマージされると以下のジョブが実行されます。
+CircleCI を使用しています。master branch にマージされると以下のジョブが実行されます。  
 
 |ジョブ |説明  |
 |---        |---              |
@@ -72,6 +84,6 @@ CircleCI を使用しています。master branch にマージされると以下
 
 ### OnsenUI
 
-本アプリは OnsenUI をベースにデザインを構築します。
+本アプリは OnsenUI をベースにデザインを構築します。  
 
 * [OnsenUI (CSS コンポーネント)](https://ja.onsen.io/v2/api/css.html)

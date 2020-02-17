@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  deploy:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - run:
+          name: npm install
+          command: npm ci
+      - run:
+          name: unit test
+          command: npm run test:unit
+      - run:
+          name: build
+          command: npm run build
+      - run:
+          name: deploy to Firebase Hosting
+          command: ./node_modules/.bin/firebase deploy --only hosting:torimo-a04a5 --token=$FIREBASE_TOKEN
+
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only: master

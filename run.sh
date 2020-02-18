@@ -1,5 +1,7 @@
 #!/bin/sh
 
+docker image prune -f
+
 # build
 docker build --tag torimo-web .
 

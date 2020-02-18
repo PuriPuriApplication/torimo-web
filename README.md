@@ -15,8 +15,8 @@ $ git clone https://github.com/PuriPuriApplication/torimo-web.git torimo-web
 
 #### Node / npm のバージョン管理ツールについて
 
-Node ... nodebrew / nvm / n  
-npm ... 以下のコマンドで更新  
+* Node ... nodebrew / nvm / n  
+* npm ... 以下のコマンドで更新  
 
 ```
 $ npm i -g npm@6.12.0
@@ -60,8 +60,16 @@ $ bash run.sh
 
 ```
 $ npm i -g firebase-tools (<- インストールしてなければ)
+
 $ firebase login
-$ firebase use torimo-web
+
+$ firebase use --add
+? Which project do you want to add? torimo-a04a5
+? What alias do you want to use for this project? (e.g. staging) default
+
+Created alias default for torimo-a04a5.
+Now using alias default (torimo-a04a5)
+
 $ npm run deploy
 ```
 

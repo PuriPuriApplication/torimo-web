@@ -36,7 +36,9 @@ export default class Detail extends Vue {
 
     created() {
         return axios
-            .get(`http://localhost:8080/articles/${this.$route.params['id']}`) // TODO: Base URL
+            .get(
+                `${process.env.VUE_APP_API_BASE_URL}/articles/${this.$route.params['id']}`
+            )
             .then(res => {
                 this.detail = res.data;
                 this.user = res.data.user;

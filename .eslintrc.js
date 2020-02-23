@@ -14,7 +14,9 @@ module.exports = {
         ecmaVersion: 2020
     },
     rules: {
-        'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+        // TODO: 正式な形となったら以下の設定を反映する
+        // 'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+        'no-console': 'off',
         'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         'prettier/prettier': [
             'error',

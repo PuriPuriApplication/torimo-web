@@ -1,23 +1,23 @@
 <template>
     <article>
         <h2>{{ detail.title }}</h2>
-        <button
+        <v-ons-button
             v-for="category in detail.categories"
             :key="category.id"
-            class="toolbar-button toolbar-button--outline"
+            modifier="outline"
         >
             {{ category.name }}
-        </button>
+        </v-ons-button>
         <div>
-            <div class="card article_item">
-                <div class="card__content" v-text="detail.body"></div>
+            <v-ons-card class="article_item">
+                <div class="content" v-text="detail.body"></div>
                 <div class="article_item__creat_at">{{ detail.createAt }}</div>
-            </div>
+            </v-ons-card>
         </div>
         <div class="article_item">
             <span>{{ user.name }}</span>
             &nbsp;さん&nbsp;
-            <button class="button">フォローする</button>
+            <v-ons-button>フォローする</v-ons-button>
         </div>
     </article>
 </template>

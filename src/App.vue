@@ -1,6 +1,13 @@
 <template>
-    <div id="app">
-        <router-view />
+    <div>
+        <v-ons-toolbar>
+            <div class="center">
+                TORIMO
+            </div>
+        </v-ons-toolbar>
+        <div id="app">
+            <router-view></router-view>
+        </div>
     </div>
 </template>
 
@@ -21,8 +28,7 @@ export default class App extends Vue {}
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+    margin: 60px 40px;
 }
 </style>

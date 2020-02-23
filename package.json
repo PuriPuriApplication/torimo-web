@@ -14,9 +14,11 @@
     "deploy": "firebase deploy --only hosting:torimo-a04a5"
   },
   "dependencies": {
+    "@types/js-cookie": "2.2.4",
     "axios": "0.19.2",
     "core-js": "^3.6.4",
     "firebase": "7.8.2",
+    "js-cookie": "2.2.1",
     "onsenui": "2.10.10",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.11",

@@ -1,8 +1,12 @@
 <template>
-    <div class="login" v-show="show">
-        <h2>Welcome Torimo</h2>
-        <img src="/img/twitter.png" @click="submit" />
-    </div>
+    <ons-page class="login">
+        <ons-modal v-show="show">
+            <div id="modal-login">
+                <h2>Welcome Torimo</h2>
+                <img src="/img/twitter.png" @click="submit" />
+            </div>
+        </ons-modal>
+    </ons-page>
 </template>
 
 <script>
@@ -19,7 +23,7 @@ export default {
                 const token = result.credential.accessToken;
                 const secret = result.credential.secret;
                 const user = result.user;
-                if (!token || !secret || !user) {
+                if (!(token && secret && user)) {
                     throw new Error('login failed');
                 }
                 Cookie.set('token', token, { expires: 1 / 24 });
@@ -58,6 +62,15 @@ export default {
 };
 </script>
 <style scoped>
+#modal-login {
+    background-color: #ffffff;
+    width: 50%;
+    color: #ffb6c1;
+    border-radius: 10px;
+    border: solid 1px #ffb6c1;
+    margin: calc((100% - 50%) / 2);
+}
+
 img {
     width: 200px;
 }

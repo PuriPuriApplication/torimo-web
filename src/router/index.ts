@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import { Route } from 'vue-router';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
-import Login from '../views/Login.vue';
+import Home from '@/views/Home.vue';
+import Login from '@/views/Login.vue';
 import firebase from 'firebase';
-import Test from '../views/Test.vue';
+import Test from '@/views/Test.vue';
 import Cookie from 'js-cookie';
 
 Vue.use(VueRouter);
@@ -27,19 +27,14 @@ const routes = [
     {
         path: '/test',
         name: 'Test',
-        async beforeEnter(
-            to: Route,
-            from: Route,
-            next: Function
-        ): Promise<void> {
-            await firebase.auth().onAuthStateChanged(user => {
-                if (user) {
-                    next();
-                } else {
-                    Cookie.set('redirect', to.fullPath);
-                    next('/login');
-                }
-            });
+        beforeEnter(to: Route, from: Route, next: Function): void {
+            const user = firebase.auth().currentUser;
+            if (user && Cookie.get('token') && Cookie.get('secret')) {
+                next();
+            } else {
+                Cookie.set('redirect', to.fullPath);
+                next('/login');
+            }
         },
         component: Test
     },

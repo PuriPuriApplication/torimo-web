@@ -37,7 +37,7 @@
                             {{ user.name }}
                         </li>
                         <!-- TODO: フォロワーをAPIから取ってくる -->
-                        <li>フォロワー：100</li>
+                        <li>フォロワー：{{ followersCount }}</li>
                     </ul>
                 </div>
                 <div>
@@ -53,24 +53,38 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import axios from 'axios';
+import { Model } from '@/types/model';
 
 @Component
 export default class Detail extends Vue {
     private detail = {};
 
-    private user = {};
+    private user: Model = { id: 0, name: '' };
 
-    private shop = {};
+    private shop: Model = { id: 0, name: '' };
+
+    private followersCount = 0;
 
     created() {
-        axios
+        this.getDetail();
+    }
+
+    async getDetail() {
+        await axios
             .get(
                 `${process.env.VUE_APP_API_BASE_URL}/articles/${this.$route.params['id']}`
             )
             .then(res => {
                 this.detail = res.data;
-                this.user = res.data.user;
-                this.shop = res.data.shop;
+                this.user = { id: res.data.user.id, name: res.data.user.name };
+                this.shop = { id: res.data.shop.id, name: res.data.shop.name };
+            });
+        axios
+            .get(
+                `${process.env.VUE_APP_API_BASE_URL}/followUser/followerCount/${this.user.id}`
+            )
+            .then(res => {
+                this.followersCount = res.data;
             });
     }
 }

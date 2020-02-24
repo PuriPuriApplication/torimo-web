@@ -36,7 +36,6 @@
                         <li class="detail_item__user_name">
                             {{ user.name }}
                         </li>
-                        <!-- TODO: フォロワーをAPIから取ってくる -->
                         <li>フォロワー：{{ followersCount }}</li>
                     </ul>
                 </div>

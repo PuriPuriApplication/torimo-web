@@ -26,14 +26,16 @@
                 </div>
             </v-ons-card>
         </div>
-        <v-ons-bottom-toolbar style="height: 70px;">
-            <div class="detail_item__fotter">
+        <v-ons-bottom-toolbar class="detail_item__fotter">
+            <div class="detail_item__fotter_content">
                 <div style="display: flex;">
                     <v-ons-fab>
                         <v-ons-icon icon="md-face"></v-ons-icon>
                     </v-ons-fab>
                     <ul class="detail_item__user">
-                        <li>{{ user.name + ' さん' }}</li>
+                        <li class="detail_item__user_name">
+                            {{ user.name }}
+                        </li>
                         <!-- TODO: フォロワーをAPIから取ってくる -->
                         <li>フォロワー：100</li>
                     </ul>
@@ -54,8 +56,6 @@ import axios from 'axios';
 
 @Component
 export default class Detail extends Vue {
-    private message = 'hogehoge';
-
     private detail = {};
 
     private user = {};
@@ -90,12 +90,13 @@ export default class Detail extends Vue {
 .detail_item {
     margin-top: 25px;
 }
-
 .detail_item__creat_at {
     text-align: right;
 }
-
 .detail_item__fotter {
+    height: 70px;
+}
+.detail_item__fotter_content {
     display: flex;
     justify-content: space-between;
     margin: 10px 10px;
@@ -104,10 +105,13 @@ export default class Detail extends Vue {
     margin: 8px auto;
     padding: 0px 20px;
 }
-
 .detail_item__user {
     list-style: none;
     margin: 0px;
     padding-left: 15px;
+}
+.detail_item__user_name {
+    font-size: 18px;
+    font-weight: bold;
 }
 </style>

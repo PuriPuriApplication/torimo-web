@@ -63,7 +63,7 @@ export default class Detail extends Vue {
     private shop = {};
 
     created() {
-        return axios
+        axios
             .get(
                 `${process.env.VUE_APP_API_BASE_URL}/articles/${this.$route.params['id']}`
             )

@@ -22,6 +22,7 @@ jobs:
             echo "VUE_APP_FIREBASE_MESSAGING_SENDER_ID=$FIREBASE_MESSAGING_SENDER_ID" >> .env
             echo "VUE_APP_FIREBASE_APP_ID=$FIREBASE_APP_ID" >> .env
             echo "VUE_APP_FIREBASE_MEASUREMENT_ID=$FIREBASE_MEASUREMENT_ID" >> .env
+            echo "VUE_APP_API_BASE_URL=$API_BASE_URL" >> .env
       - run:
           name: build
           command: npm run build

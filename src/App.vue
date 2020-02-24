@@ -23,12 +23,15 @@ import HelloWorld from './components/HelloWorld.vue';
 export default class App extends Vue {}
 </script>
 
-<style>
+<style scoped>
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-    margin: 60px 40px;
+    min-width: 500px;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0px 20px;
 }
 </style>

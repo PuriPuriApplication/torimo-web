@@ -20,16 +20,25 @@ export default {
         try {
             const result = await firebase.auth().getRedirectResult();
             if (result.credential) {
-                const token = result.credential.accessToken;
+                const accessToken = result.credential.accessToken;
                 const secret = result.credential.secret;
                 const user = result.user;
-                if (!(token && secret && user)) {
+                const idToken = await firebase
+                    .auth()
+                    .currentUser.getIdToken(/* forceRefresh */ true);
+                if (!(accessToken && secret && user && idToken)) {
                     throw new Error('login failed');
                 }
-                Cookie.set('token', token, { expires: 1 / 24 });
-                Cookie.set('secret', token, { expires: 1 / 24 });
-
-                this.$store.commit('auth/setUser', user);
+                await this.$store.dispatch('auth/setUserData', {
+                    uid: user.uid,
+                    name: user.displayName,
+                    iconPath: user.photoURL,
+                    mailAddress: user.email,
+                    phoneNumber: user.phoneNumber,
+                    idToken: idToken,
+                    accessToken: accessToken,
+                    secretKey: secret
+                });
                 isLogined = true;
             }
         } catch (error) {
@@ -37,7 +46,7 @@ export default {
         }
         if (isLogined) {
             const path = Cookie.get('redirect');
-            if (path !== 'undefined') {
+            if (path !== undefined) {
                 Cookie.get('redirect', undefined);
                 this.$router.push(path);
             } else {

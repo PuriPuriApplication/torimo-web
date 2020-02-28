@@ -39,11 +39,10 @@ export const auth: Module<AuthState, RootState> = {
                 externalServiceId: uid,
                 externalServiceType: 'TWITTER'
             };
-            const a = await axios.post(
+            await axios.post(
                 `${process.env.VUE_APP_API_BASE_URL}/user/create`,
                 registData
             );
-            console.log('SUCCESS??: ' + a);
         },
         loginCheck({ state }): boolean {
             const idToken = Cookie.get('idToken');

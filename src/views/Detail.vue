@@ -53,10 +53,24 @@
 import { Vue, Component } from 'vue-property-decorator';
 import axios from 'axios';
 import { Model } from '@/types/model';
+import { ArticleDetail } from '@/entity/detail';
 
 @Component
 export default class Detail extends Vue {
-    private detail = {};
+    private detail: ArticleDetail = {
+        id: 0,
+        title: '',
+        body: '',
+        createAt: '',
+        user: {
+            id: 0,
+            name: '',
+            externalServiceId: 0,
+            externalServiceType: ''
+        },
+        shop: { id: 0, name: '' },
+        categories: [{ id: 0, name: '' }]
+    };
 
     private user: Model = { id: 0, name: '' };
 
@@ -69,22 +83,17 @@ export default class Detail extends Vue {
     }
 
     async getDetail() {
-        await axios
-            .get(
-                `${process.env.VUE_APP_API_BASE_URL}/articles/${this.$route.params['id']}`
-            )
-            .then(res => {
-                this.detail = res.data;
-                this.user = { id: res.data.user.id, name: res.data.user.name };
-                this.shop = { id: res.data.shop.id, name: res.data.shop.name };
-            });
-        axios
-            .get(
-                `${process.env.VUE_APP_API_BASE_URL}/followUser/followerCount/${this.user.id}`
-            )
-            .then(res => {
-                this.followersCount = res.data;
-            });
+        const { data: detail } = await axios.get<ArticleDetail>(
+            `${process.env.VUE_APP_API_BASE_URL}/articles/${this.$route.params['id']}`
+        );
+        this.detail = detail;
+        this.shop = detail.shop;
+        this.user = detail.user;
+
+        const { data: count } = await axios.get(
+            `${process.env.VUE_APP_API_BASE_URL}/followUser/followerCount/${detail.user.id}`
+        );
+        this.followersCount = count;
     }
 }
 </script>

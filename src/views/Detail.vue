@@ -5,10 +5,9 @@
                 <h2>{{ detail.title }}</h2>
             </div>
             <div>
-                <v-ons-fab class="detail_item__like">
-                    <i class="far fa-heart"></i>
-                    <!-- TODO: v-if でいいねしたらこっちのアイコン -->
-                    <!-- <i class="fas fa-heart"></i> -->
+                <v-ons-fab class="detail_item__like" @click="postArticleLike">
+                    <i v-if="!isLike" class="far fa-heart"></i>
+                    <i v-else class="fas fa-heart"></i>
                 </v-ons-fab>
             </div>
         </div>
@@ -54,6 +53,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import axios from 'axios';
 import { Model } from '@/types/model';
 import { ArticleDetail } from '@/entity/detail';
+import { ArticleLike } from '@/entity/article';
 
 @Component
 export default class Detail extends Vue {
@@ -78,8 +78,11 @@ export default class Detail extends Vue {
 
     private followersCount = 0;
 
+    isLike = false;
+
     created() {
         this.getDetail();
+        console.log(this.isLike);
     }
 
     async getDetail() {
@@ -89,11 +92,33 @@ export default class Detail extends Vue {
         this.detail = detail;
         this.shop = detail.shop;
         this.user = detail.user;
+        // TODO: いいね、フォロー済みかのデータをとってきて、フラグを変更する処理が必要
 
         const { data: count } = await axios.get(
             `${process.env.VUE_APP_API_BASE_URL}/followUser/followerCount/${detail.user.id}`
         );
         this.followersCount = count;
+    }
+
+    postArticleLike() {
+        const articleLike: ArticleLike = {
+            articleId: this.detail.id,
+            userId: this.user.id
+        };
+        axios
+            .post(
+                `${process.env.VUE_APP_API_BASE_URL}/article-like/like`,
+                articleLike
+            )
+            .then(() => {
+                console.log('OK');
+                this.isLike === true;
+                console.log('isLike', this.isLike);
+            })
+            .catch(() => {
+                console.log('NG');
+                this.isLike === false;
+            }); // TODO: エラーメッセージ表示
     }
 }
 </script>

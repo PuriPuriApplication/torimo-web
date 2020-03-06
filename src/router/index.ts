@@ -6,6 +6,7 @@ import Login from '@/views/Login.vue';
 import firebase from 'firebase';
 import Test from '@/views/Test.vue';
 import Cookie from 'js-cookie';
+import PostArticle from '../views/Articles/New.vue';
 
 Vue.use(VueRouter);
 
@@ -47,6 +48,11 @@ const routes = [
         path: '/detail/:id',
         name: 'Detail',
         component: () => import('../views/Detail.vue')
+    },
+    {
+        path: '/post',
+        name: 'Post',
+        component: PostArticle
     }
 ];
 

@@ -26,7 +26,9 @@ module.exports = {
             }
         ],
         // any を許容するように設定します.
-        '@typescript-eslint/no-explicit-any': 'off'
+        '@typescript-eslint/no-explicit-any': 'off',
+        'eslint-disable-next-line': 'off',
+        '@typescript-eslint/interface-name-prefix': 'off'
     },
     overrides: [
         {

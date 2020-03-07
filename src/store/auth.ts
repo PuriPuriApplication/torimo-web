@@ -10,7 +10,7 @@ export const auth: Module<AuthState, RootState> = {
         user: undefined
     },
     actions: {
-        async setUserData(
+        async saveUser(
             { commit },
             {
                 uid,
@@ -27,11 +27,11 @@ export const auth: Module<AuthState, RootState> = {
             Cookie.set('accessToken', accessToken, { expires: 1 / 24 });
             Cookie.set('secretKey', secretKey, { expires: 1 / 24 });
             const user: User = {
-                uid: uid,
-                name: name,
-                iconPath: iconPath,
-                mailAddress: mailAddress,
-                phoneNumber: phoneNumber
+                uid,
+                name,
+                iconPath,
+                mailAddress,
+                phoneNumber
             };
             commit('setUser', user);
             const registData = {
@@ -43,15 +43,6 @@ export const auth: Module<AuthState, RootState> = {
                 `${process.env.VUE_APP_API_BASE_URL}/user/create`,
                 registData
             );
-        },
-        loginCheck({ state }): boolean {
-            const idToken = Cookie.get('idToken');
-            const accessToken = Cookie.get('accessToken');
-            const secretKey = Cookie.get('secretKey');
-            if (idToken && accessToken && secretKey && state.user) {
-                return true;
-            }
-            return false;
         }
     },
     mutations: {

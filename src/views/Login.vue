@@ -29,7 +29,7 @@ export default {
                 if (!(accessToken && secret && user && idToken)) {
                     throw new Error('login failed');
                 }
-                await this.$store.dispatch('auth/setUserData', {
+                await this.$store.dispatch('auth/saveUser', {
                     uid: user.uid,
                     name: user.displayName,
                     iconPath: user.photoURL,
@@ -46,7 +46,7 @@ export default {
         }
         if (isLogined) {
             const path = Cookie.get('redirect');
-            if (path !== undefined) {
+            if (path) {
                 Cookie.get('redirect', undefined);
                 this.$router.push(path);
             } else {

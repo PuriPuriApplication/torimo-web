@@ -12,6 +12,7 @@
 <script>
 import firebase from 'firebase';
 import Cookie from 'js-cookie';
+import cookie from '@/plugins/cookie';
 
 export default {
     name: 'Login',
@@ -45,9 +46,9 @@ export default {
             console.error(error);
         }
         if (isLogined) {
-            const path = Cookie.get('redirect');
+            const path = Cookie.get(cookie.redirect);
             if (path) {
-                Cookie.get('redirect', undefined);
+                Cookie.get(cookie.redirect, undefined);
                 this.$router.push(path);
             } else {
                 this.$router.push('/home');

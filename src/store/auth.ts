@@ -1,8 +1,9 @@
 import { AuthState, RootState } from './interface';
 import { Module } from 'vuex';
-import Cookie from 'js-cookie';
-import User from '@/entity/user';
+import { User } from '@/entity/user';
 import axios from 'axios';
+import Cookie from 'js-cookie';
+import cookie from '@/plugins/cookie';
 
 export const auth: Module<AuthState, RootState> = {
     namespaced: true,
@@ -23,9 +24,9 @@ export const auth: Module<AuthState, RootState> = {
                 secretKey
             }
         ) {
-            Cookie.set('idToken', idToken, { expires: 1 / 24 });
-            Cookie.set('accessToken', accessToken, { expires: 1 / 24 });
-            Cookie.set('secretKey', secretKey, { expires: 1 / 24 });
+            Cookie.set(cookie.idToken, idToken, { expires: 1 / 24 });
+            Cookie.set(cookie.accessToken, accessToken, { expires: 1 / 24 });
+            Cookie.set(cookie.secretKey, secretKey, { expires: 1 / 24 });
             const user: User = {
                 uid,
                 name,

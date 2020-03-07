@@ -36,8 +36,7 @@
                         <li class="detail_item__user_name">
                             {{ user.name }}
                         </li>
-                        <!-- TODO: フォロワーをAPIから取ってくる -->
-                        <li>フォロワー：100</li>
+                        <li>フォロワー：{{ followersCount }}</li>
                     </ul>
                 </div>
                 <div>
@@ -53,25 +52,48 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import axios from 'axios';
+import { Model } from '@/types/model';
+import { ArticleDetail } from '@/entity/detail';
 
 @Component
 export default class Detail extends Vue {
-    private detail = {};
+    private detail: ArticleDetail = {
+        id: 0,
+        title: '',
+        body: '',
+        createAt: '',
+        user: {
+            id: 0,
+            name: '',
+            externalServiceId: 0,
+            externalServiceType: ''
+        },
+        shop: { id: 0, name: '' },
+        categories: [{ id: 0, name: '' }]
+    };
 
-    private user = {};
+    private user: Model = { id: 0, name: '' };
 
-    private shop = {};
+    private shop: Model = { id: 0, name: '' };
+
+    private followersCount = 0;
 
     created() {
-        axios
-            .get(
-                `${process.env.VUE_APP_API_BASE_URL}/articles/${this.$route.params['id']}`
-            )
-            .then(res => {
-                this.detail = res.data;
-                this.user = res.data.user;
-                this.shop = res.data.shop;
-            });
+        this.getDetail();
+    }
+
+    async getDetail() {
+        const { data: detail } = await axios.get<ArticleDetail>(
+            `${process.env.VUE_APP_API_BASE_URL}/articles/${this.$route.params['id']}`
+        );
+        this.detail = detail;
+        this.shop = detail.shop;
+        this.user = detail.user;
+
+        const { data: count } = await axios.get(
+            `${process.env.VUE_APP_API_BASE_URL}/followUser/followerCount/${detail.user.id}`
+        );
+        this.followersCount = count;
     }
 }
 </script>

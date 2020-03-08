@@ -109,6 +109,7 @@ export default class Detail extends Vue {
         if (likeAndFollows.articleLikes.includes(this.user.id)) {
             this.isLike = true;
         }
+        // TODO: 自分のユーザIDはフロントでもってないのでサーバーで認証情報から判別する必要がある？？
         likeAndFollows.followUsers.forEach(followUser => {
             if (followUser.fromUser === this.user.id) {
                 this.isFollow === true;

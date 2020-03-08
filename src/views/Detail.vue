@@ -84,7 +84,6 @@ export default class Detail extends Vue {
 
     created() {
         this.getDetail();
-        console.log(this.isLike);
     }
 
     async getDetail() {

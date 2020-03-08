@@ -6,8 +6,8 @@
             </div>
             <div>
                 <v-ons-fab class="detail_item__like" @click="postArticleLike">
-                    <i v-if="!isLike" class="far fa-heart"></i>
-                    <i v-else class="fas fa-heart"></i>
+                    <i v-if="isLike" class="fas fa-heart"></i>
+                    <i v-else-if="!isLike" class="far fa-heart"></i>
                 </v-ons-fab>
             </div>
         </div>
@@ -39,9 +39,10 @@
                     </ul>
                 </div>
                 <div>
-                    <v-ons-button modifier="outline">フォローする</v-ons-button>
-                    <!-- TODO: フォローしたらこっちのアイコン -->
-                    <!-- <v-ons-button>フォロー中</v-ons-button> -->
+                    <v-ons-button v-if="isFollow">フォロー中</v-ons-button>
+                    <v-ons-button v-else modifier="outline"
+                        >フォローする</v-ons-button
+                    >
                 </div>
             </div>
         </v-ons-bottom-toolbar>
@@ -52,8 +53,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import axios from 'axios';
 import { Model } from '@/types/model';
-import { ArticleDetail } from '@/entity/detail';
-import { ArticleLike } from '@/entity/article';
+import { ArticleLike, ArticleDetail, LikeAndFollowers } from '@/entity/article';
 
 @Component
 export default class Detail extends Vue {
@@ -78,7 +78,9 @@ export default class Detail extends Vue {
 
     private followersCount = 0;
 
-    isLike = false;
+    private isLike = false;
+
+    private isFollow = false;
 
     created() {
         this.getDetail();
@@ -92,14 +94,31 @@ export default class Detail extends Vue {
         this.detail = detail;
         this.shop = detail.shop;
         this.user = detail.user;
-        // TODO: いいね、フォロー済みかのデータをとってきて、フラグを変更する処理が必要
 
         const { data: count } = await axios.get(
             `${process.env.VUE_APP_API_BASE_URL}/followUser/followerCount/${detail.user.id}`
         );
         this.followersCount = count;
+
+        const { data: likeAndFollows } = await axios.get<LikeAndFollowers>(
+            `${process.env.VUE_APP_API_BASE_URL}/articles/${this.$route.params['id']}/like-and-follow`
+        );
+        this.checkLikeAndFollow(likeAndFollows);
     }
 
+    checkLikeAndFollow(likeAndFollows: LikeAndFollowers) {
+        if (likeAndFollows.articleLikes.includes(this.user.id)) {
+            this.isLike = true;
+        }
+        likeAndFollows.followUsers.forEach(followUser => {
+            if (followUser.fromUser === this.user.id) {
+                this.isFollow === true;
+                return;
+            }
+        });
+    }
+
+    // TODO: いいね機能の実装。プルリク分けます。
     postArticleLike() {
         const articleLike: ArticleLike = {
             articleId: this.detail.id,
@@ -114,6 +133,7 @@ export default class Detail extends Vue {
                 console.log('OK');
                 this.isLike === true;
                 console.log('isLike', this.isLike);
+                // TODO: 再レンダリングされてない？
             })
             .catch(() => {
                 console.log('NG');

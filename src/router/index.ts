@@ -29,7 +29,10 @@ const routes = [
         name: 'Test',
         beforeEnter(to: Route, from: Route, next: Function): void {
             const user = firebase.auth().currentUser;
-            if (user && Cookie.get('token') && Cookie.get('secret')) {
+            const token = Cookie.get('idToken');
+            const accessToken = Cookie.get('accessToken');
+            const secretKey = Cookie.get('secretKey');
+            if (user && token && accessToken && secretKey) {
                 next();
             } else {
                 Cookie.set('redirect', to.fullPath);

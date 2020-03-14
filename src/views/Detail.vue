@@ -5,9 +5,19 @@
                 <h2>{{ detail.title }}</h2>
             </div>
             <div>
-                <v-ons-fab class="detail_item__like" @click="postArticleLike">
-                    <i v-if="isLike" class="fas fa-heart"></i>
-                    <i v-else-if="!isLike" class="far fa-heart"></i>
+                <v-ons-fab
+                    v-if="isLike"
+                    class="detail_item__like"
+                    @click="postArticleUnLike"
+                >
+                    <i class="fas fa-heart"></i>
+                </v-ons-fab>
+                <v-ons-fab
+                    v-else
+                    class="detail_item__like"
+                    @click="postArticleLike"
+                >
+                    <i class="far fa-heart"></i>
                 </v-ons-fab>
             </div>
         </div>
@@ -129,16 +139,20 @@ export default class Detail extends Vue {
                 `${process.env.VUE_APP_API_BASE_URL}/article-like/like`,
                 articleLike
             )
-            .then(() => {
-                console.log('OK');
-                this.isLike === true;
-                console.log('isLike', this.isLike);
-                // TODO: 再レンダリングされてない？
-            })
-            .catch(() => {
-                console.log('NG');
-                this.isLike === false;
-            }); // TODO: エラーメッセージ表示
+            .then(() => (this.isLike = true));
+    }
+
+    postArticleUnLike() {
+        const articleLike: ArticleLike = {
+            articleId: this.detail.id,
+            userId: this.user.id
+        };
+        axios
+            .post(
+                `${process.env.VUE_APP_API_BASE_URL}/article-like/unlike`,
+                articleLike
+            )
+            .then(() => (this.isLike = false));
     }
 }
 </script>

@@ -120,15 +120,11 @@ export default class Detail extends Vue {
             this.isLike = true;
         }
         // TODO: 自分のユーザIDはフロントでもってないのでサーバーで認証情報から判別する必要がある？？
-        likeAndFollows.followUsers.forEach(followUser => {
-            if (followUser.fromUser === this.user.id) {
-                this.isFollow === true;
-                return;
-            }
-        });
+        this.isFollow = likeAndFollows.followUsers.some(
+            followUser => followUser.fromUser === this.user.id
+        );
     }
 
-    // TODO: いいね機能の実装。プルリク分けます。
     postArticleLike() {
         const articleLike: ArticleLike = {
             articleId: this.detail.id,

@@ -125,28 +125,28 @@ export default class Detail extends Vue {
         );
     }
 
-    postArticleLike() {
+    makeArticleLike(): ArticleLike {
         const articleLike: ArticleLike = {
             articleId: this.detail.id,
             userId: this.user.id
         };
+        return articleLike;
+    }
+
+    postArticleLike() {
         axios
             .post(
                 `${process.env.VUE_APP_API_BASE_URL}/article-like/like`,
-                articleLike
+                this.makeArticleLike()
             )
             .then(() => (this.isLike = true));
     }
 
     postArticleUnLike() {
-        const articleLike: ArticleLike = {
-            articleId: this.detail.id,
-            userId: this.user.id
-        };
         axios
             .post(
                 `${process.env.VUE_APP_API_BASE_URL}/article-like/unlike`,
-                articleLike
+                this.makeArticleLike()
             )
             .then(() => (this.isLike = false));
     }

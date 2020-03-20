@@ -63,24 +63,11 @@
 import { Vue, Component } from 'vue-property-decorator';
 import axios from 'axios';
 import { Model } from '@/types/model';
-import { ArticleLike, ArticleDetail, LikeAndFollowers } from '@/entity/article';
+import { ArticleLike, ArticleDetail } from '@/entity/article';
 
 @Component
 export default class Detail extends Vue {
-    private detail: ArticleDetail = {
-        id: 0,
-        title: '',
-        body: '',
-        createAt: '',
-        user: {
-            id: 0,
-            name: '',
-            externalServiceId: 0,
-            externalServiceType: ''
-        },
-        shop: { id: 0, name: '' },
-        categories: [{ id: 0, name: '' }]
-    };
+    private detail: ArticleDetail = {} as ArticleDetail;
 
     private user: Model = { id: 0, name: '' };
 
@@ -109,28 +96,27 @@ export default class Detail extends Vue {
         );
         this.followersCount = count;
 
-        const { data: likeAndFollows } = await axios.get<LikeAndFollowers>(
-            `${process.env.VUE_APP_API_BASE_URL}/articles/${this.$route.params['id']}/like-and-follow`
-        );
-        this.checkLikeAndFollow(likeAndFollows);
-    }
-
-    checkLikeAndFollow(likeAndFollows: LikeAndFollowers) {
-        if (likeAndFollows.articleLikes.includes(this.user.id)) {
-            this.isLike = true;
-        }
-        // TODO: 自分のユーザIDはフロントでもってないのでサーバーで認証情報から判別する必要がある？？
-        this.isFollow = likeAndFollows.followUsers.some(
-            followUser => followUser.fromUser === this.user.id
-        );
+        axios
+            .get(
+                `${process.env.VUE_APP_API_BASE_URL}/article-like/isLike/${this.$route.params['id']}`
+            )
+            .then(() => this.isLikeToTrue)
+            .catch(() => this.isLikeToFalse);
     }
 
     makeArticleLike(): ArticleLike {
-        const articleLike: ArticleLike = {
+        return {
             articleId: this.detail.id,
             userId: this.user.id
         };
-        return articleLike;
+    }
+
+    isLikeToTrue() {
+        this.isLike = true;
+    }
+
+    isLikeToFalse() {
+        this.isLike = false;
     }
 
     postArticleLike() {
@@ -139,7 +125,8 @@ export default class Detail extends Vue {
                 `${process.env.VUE_APP_API_BASE_URL}/article-like/like`,
                 this.makeArticleLike()
             )
-            .then(() => (this.isLike = true));
+            .then(() => this.isLikeToTrue)
+            .catch(err => err);
     }
 
     postArticleUnLike() {
@@ -148,7 +135,8 @@ export default class Detail extends Vue {
                 `${process.env.VUE_APP_API_BASE_URL}/article-like/unlike`,
                 this.makeArticleLike()
             )
-            .then(() => (this.isLike = false));
+            .then(() => this.isLikeToFalse)
+            .catch(err => err);
     }
 }
 </script>

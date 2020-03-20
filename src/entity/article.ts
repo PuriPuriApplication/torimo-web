@@ -18,11 +18,6 @@ export type ArticleDetail = {
     categories: Model[];
 };
 
-export type LikeAndFollowers = {
-    articleLikes: number[];
-    followUsers: FollowUser[];
-};
-
 export type FollowUser = {
     fromUser: number;
     toUser: number;

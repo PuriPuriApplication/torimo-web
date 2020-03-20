@@ -68,7 +68,7 @@ import { ArticleLike, ArticleDetail } from '@/entity/article';
 @Component
 export default class Detail extends Vue {
     // TODO: 初期化の処理を外だししたい
-    private detail: ArticleDetail = {
+    public detail: ArticleDetail = {
         id: 0,
         title: '',
         body: '',
@@ -83,15 +83,15 @@ export default class Detail extends Vue {
         categories: [{ id: 0, name: '' }]
     };
 
-    private user: Model = { id: 0, name: '' };
+    public user: Model = { id: 0, name: '' };
 
-    private shop: Model = { id: 0, name: '' };
+    public shop: Model = { id: 0, name: '' };
 
-    private followersCount = 0;
+    public followersCount = 0;
 
-    private isLike = false;
+    public isLike = false;
 
-    private isFollow = false;
+    public isFollow = false;
 
     created() {
         this.getDetail();

@@ -5,10 +5,19 @@
                 <h2>{{ detail.title }}</h2>
             </div>
             <div>
-                <v-ons-fab class="detail_item__like">
+                <v-ons-fab
+                    v-if="isLike"
+                    class="detail_item__like"
+                    @click="postArticleUnLike"
+                >
+                    <i class="fas fa-heart"></i>
+                </v-ons-fab>
+                <v-ons-fab
+                    v-else
+                    class="detail_item__like"
+                    @click="postArticleLike"
+                >
                     <i class="far fa-heart"></i>
-                    <!-- TODO: v-if でいいねしたらこっちのアイコン -->
-                    <!-- <i class="fas fa-heart"></i> -->
                 </v-ons-fab>
             </div>
         </div>
@@ -40,9 +49,10 @@
                     </ul>
                 </div>
                 <div>
-                    <v-ons-button modifier="outline">フォローする</v-ons-button>
-                    <!-- TODO: フォローしたらこっちのアイコン -->
-                    <!-- <v-ons-button>フォロー中</v-ons-button> -->
+                    <v-ons-button v-if="isFollow">フォロー中</v-ons-button>
+                    <v-ons-button v-else modifier="outline"
+                        >フォローする</v-ons-button
+                    >
                 </div>
             </div>
         </v-ons-bottom-toolbar>
@@ -53,11 +63,12 @@
 import { Vue, Component } from 'vue-property-decorator';
 import axios from 'axios';
 import { Model } from '@/types/model';
-import { ArticleDetail } from '@/entity/detail';
+import { ArticleLike, ArticleDetail } from '@/entity/article';
 
 @Component
 export default class Detail extends Vue {
-    private detail: ArticleDetail = {
+    // TODO: 初期化の処理を外だししたい
+    public detail: ArticleDetail = {
         id: 0,
         title: '',
         body: '',
@@ -72,11 +83,15 @@ export default class Detail extends Vue {
         categories: [{ id: 0, name: '' }]
     };
 
-    private user: Model = { id: 0, name: '' };
+    public user: Model = { id: 0, name: '' };
 
-    private shop: Model = { id: 0, name: '' };
+    public shop: Model = { id: 0, name: '' };
 
-    private followersCount = 0;
+    public followersCount = 0;
+
+    public isLike = false;
+
+    public isFollow = false;
 
     created() {
         this.getDetail();
@@ -94,6 +109,48 @@ export default class Detail extends Vue {
             `${process.env.VUE_APP_API_BASE_URL}/followUser/followerCount/${detail.user.id}`
         );
         this.followersCount = count;
+
+        await axios
+            .get(
+                `${process.env.VUE_APP_API_BASE_URL}/article-like/isLike/${this.$route.params['id']}`
+            )
+            .catch(() => this.isLikeToFalse);
+        this.isLikeToTrue;
+    }
+
+    makeArticleLike(): ArticleLike {
+        return {
+            articleId: this.detail.id,
+            userId: this.user.id
+        };
+    }
+
+    isLikeToTrue() {
+        this.isLike = true;
+    }
+
+    isLikeToFalse() {
+        this.isLike = false;
+    }
+
+    async postArticleLike() {
+        await axios
+            .post(
+                `${process.env.VUE_APP_API_BASE_URL}/article-like/like`,
+                this.makeArticleLike()
+            )
+            .catch(err => err);
+        this.isLikeToTrue;
+    }
+
+    async postArticleUnLike() {
+        await axios
+            .post(
+                `${process.env.VUE_APP_API_BASE_URL}/article-like/unlike`,
+                this.makeArticleLike()
+            )
+            .catch(err => err);
+        this.isLikeToFalse;
     }
 }
 </script>

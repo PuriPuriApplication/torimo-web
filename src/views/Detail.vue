@@ -96,12 +96,12 @@ export default class Detail extends Vue {
         );
         this.followersCount = count;
 
-        axios
+        await axios
             .get(
                 `${process.env.VUE_APP_API_BASE_URL}/article-like/isLike/${this.$route.params['id']}`
             )
-            .then(() => this.isLikeToTrue)
             .catch(() => this.isLikeToFalse);
+        this.isLikeToTrue;
     }
 
     makeArticleLike(): ArticleLike {
@@ -119,24 +119,24 @@ export default class Detail extends Vue {
         this.isLike = false;
     }
 
-    postArticleLike() {
-        axios
+    async postArticleLike() {
+        await axios
             .post(
                 `${process.env.VUE_APP_API_BASE_URL}/article-like/like`,
                 this.makeArticleLike()
             )
-            .then(() => this.isLikeToTrue)
             .catch(err => err);
+        this.isLikeToTrue;
     }
 
-    postArticleUnLike() {
-        axios
+    async postArticleUnLike() {
+        await axios
             .post(
                 `${process.env.VUE_APP_API_BASE_URL}/article-like/unlike`,
                 this.makeArticleLike()
             )
-            .then(() => this.isLikeToFalse)
             .catch(err => err);
+        this.isLikeToFalse;
     }
 }
 </script>

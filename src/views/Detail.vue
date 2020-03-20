@@ -67,7 +67,21 @@ import { ArticleLike, ArticleDetail } from '@/entity/article';
 
 @Component
 export default class Detail extends Vue {
-    private detail: ArticleDetail = {} as ArticleDetail;
+    // TODO: 初期化の処理を外だししたい
+    private detail: ArticleDetail = {
+        id: 0,
+        title: '',
+        body: '',
+        createAt: '',
+        user: {
+            id: 0,
+            name: '',
+            externalServiceId: 0,
+            externalServiceType: ''
+        },
+        shop: { id: 0, name: '' },
+        categories: [{ id: 0, name: '' }]
+    };
 
     private user: Model = { id: 0, name: '' };
 
